@@ -9,9 +9,11 @@ private:
 	std::vector<float> weights;
 public:
 	Node(int);
+	void init_connections(int);
+	int return_connections();
 	void update_value(int);
 	int return_value();
-	void update_weights(std::vector<float>);
+	void update_weights(std::vector<float>&);
 	std::vector<float> return_weights();
 
 };
