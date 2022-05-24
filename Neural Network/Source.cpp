@@ -11,16 +11,22 @@ int main() {
 	
 	Layer first_layer(10, 4);
 	Layer second_layer(4, 4);
+	Layer third_layer(4, 10);
+	Layer output_layer(10, 0);
 
 	print_layer(first_layer);
 	print_layer(second_layer);
-}
+	print_layer(third_layer);
+	print_layer(output_layer);
 
+	
+	for (int i = 0; i < second_layer.return_size(); i++) {
+		std::vector<float> current_weights(0, 0);
 
-void print_weights(std::vector<float> weights) {
-	for (int i = 0; i < weights.size(); i++) {
-		std::cout << "Weight of connection " << i << ": " << weights.at(i) << std::endl;
-
+		for (int j = 0; j < first_layer.return_size(); j++) {
+			current_weights.push_back(first_layer.access_node(j).return_weights().at(i));
+		}
+		second_layer.access_node(i).update_value()
 	}
 }
 
