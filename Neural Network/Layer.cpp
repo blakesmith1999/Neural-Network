@@ -26,5 +26,5 @@ std::vector<Node> Layer::return_nodes() {
 }
 
 Node Layer::access_node(int node_num) {
-	return nodes[node_num];
+	return nodes.at(node_num);
 }
