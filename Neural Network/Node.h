@@ -5,9 +5,10 @@ class Node
 {
 private:
 	float value;
-	int num_connections; //number of nodes in the next layer
+	int num_connections; //number of nodes in the previous layer
 	std::vector<float> weights;
 	float delta;
+	float bias;
 public:
 	Node(int);
 	void init_connections(int);
@@ -19,5 +20,7 @@ public:
 	std::vector<float> return_weights();
 	float return_delta();
 	void update_delta(float);
+	float return_bias();
+	void update_bias(float);
 };
 

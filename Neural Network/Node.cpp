@@ -1,12 +1,19 @@
 #include "Node.h"
+#include "Time.h"
 #include <iostream>
 Node::Node(int connections) {
 	init_connections(connections);
+	
+	std::vector<float> zero_weight(num_connections, 0);
 
-	std::vector<float> zero_weight (num_connections,1);
+	for (int i(0); i < num_connections; i++) {
+		srand((unsigned)time(NULL));
+		zero_weight[i] = (float)rand() / RAND_MAX;
+	}
 	update_weights(zero_weight);
-	update_value(0);
-	update_delta(0);
+	update_value((float)rand() / RAND_MAX);
+	update_delta((float)rand() / RAND_MAX);
+	update_bias((float)rand() / RAND_MAX);
 }
 
 void Node::init_connections(int connections) {
@@ -45,3 +52,10 @@ void Node::update_delta(float new_delta) {
 	delta = new_delta;
 }
 
+float Node::return_bias() {
+	return bias;
+}
+
+void Node::update_bias(float new_bias) {
+	bias = new_bias;
+}
