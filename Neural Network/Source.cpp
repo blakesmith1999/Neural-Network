@@ -191,7 +191,7 @@ void correct_weights(std::vector<Layer>& network, float l_rate) {
 			std::vector<float> weights = nodes.at(j).return_weights();
 			for (int k = 0; k < nodes.at(j).return_connections(); k++) {
 				//iterates through the weights in a node
-				weights.at(k) -= l_rate * nodes.at(j).return_value() * network[i - 1].access_node(k).return_delta();
+				weights.at(k) -= l_rate * nodes.at(j).return_delta() * network[static_cast<std::vector<Layer, std::allocator<Layer>>::size_type>(i) - 1].access_node(k).return_value();
 			}
 			nodes.at(j).update_weights(weights);
 			float bias = nodes.at(j).return_bias();
