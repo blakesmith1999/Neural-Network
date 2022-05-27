@@ -4,6 +4,9 @@
 #include <cmath>
 #include "Layer.h"
 
+//
+
+
 void print_weights(std::vector<float>);
 void print_layer(Layer,int);
 void print_network(std::vector<Layer>);
@@ -31,7 +34,7 @@ int main() {
 	network.push_back(third_layer);
 	network.push_back(output_layer);
 
-
+	//const int training_data[4][2] = { 1,0,1,0,1,0,1,0 };
 	const int training_data[4][2] = { 1,0, 2, 1, 3, 0, 4, 1 };
 	for (int i(0); i < 4; i++) {
 		for (int j(0); j < 2; j++) {
@@ -52,19 +55,20 @@ int main() {
 
 			backpropagate(network, training_data[answer][1]);
 
+			correct_weights(network, l_rate);
+
 			//print_network(network);
 		}
 
-		correct_weights(network, l_rate);
 		//print_network(network);
 		//std::cout << "Corrected Weights" << std::endl;
 	}
 	
-	activate_input(network, 2);
+	activate_input(network, 1);
 	propagate(network);
 	print_network(network);
 
-	activate_input(network, 3);
+	activate_input(network, 1);
 	propagate(network);
 	print_network(network);
 }
@@ -77,7 +81,7 @@ void backpropagate_layer(Layer& output_layer, float expected_number) {
 		float actual_value = output_layer.access_node(i).return_value();
 		float delta = nodes.at(i).return_delta();
 
-		nodes.at(i).update_delta(delta + ((actual_value - expected_number) * transfer_derivative(actual_value)));
+		nodes.at(i).update_delta((actual_value - expected_number) * transfer_derivative(actual_value));
 		/*
 		if (i == (expected_number - 1)) {
 			nodes.at(i).update_delta(delta + (actual_value - 1) * transfer_derivative(actual_value));
@@ -103,14 +107,14 @@ void backpropagate_layer(Layer& current_layer, Layer next_layer) {
 		for (int j = 0; j < next_layer.return_size(); j++) {
 			error += (next_layer.access_node(j).access_weight(i) * next_layer.access_node(j).return_delta());
 		}
-		nodes.at(i).update_delta((nodes.at(i).return_delta()+ error * transfer_derivative(actual_value)));
+		nodes.at(i).update_delta(error * transfer_derivative(actual_value));
 	}
 	current_layer.set_nodes(nodes);
 }
 
 void backpropagate(std::vector<Layer>& network, float expected_value) {
 	backpropagate_layer(network[3], expected_value);
-	for (int i = network.size() - 2; i >= 0; i--) {
+	for (int i = network.size() - 2; i > 0; i--) {
 		backpropagate_layer(network[i], network[i+1]);
 	}
 }
@@ -191,7 +195,7 @@ void correct_weights(std::vector<Layer>& network, float l_rate) {
 			std::vector<float> weights = nodes.at(j).return_weights();
 			for (int k = 0; k < nodes.at(j).return_connections(); k++) {
 				//iterates through the weights in a node
-				weights.at(k) -= l_rate * nodes.at(j).return_delta() * network[static_cast<std::vector<Layer, std::allocator<Layer>>::size_type>(i) - 1].access_node(k).return_value();
+				weights.at(k) -= l_rate * nodes.at(j).return_delta() * network[i - 1].access_node(k).return_value();
 			}
 			nodes.at(j).update_weights(weights);
 			float bias = nodes.at(j).return_bias();
